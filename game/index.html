@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neon Vice</title>
+<link rel="icon" href="data:,">
+<style>
+  :root { --cyan:#22e6ff; --magenta:#ff2ea6; --glass:rgba(8,12,28,.72); --line:rgba(34,230,255,.35); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; overflow:hidden; background:#05060f;
+    font-family:system-ui, -apple-system, "Segoe UI", sans-serif; color:#e8f6ff; }
+  #app { position:fixed; inset:0; }
+  canvas.webgl { display:block; width:100%; height:100%; }
+  .hud { position:absolute; pointer-events:none; z-index:5; }
+  .panel { background:var(--glass); border:1px solid var(--line); border-radius:10px;
+    backdrop-filter:blur(6px); box-shadow:0 0 18px rgba(34,230,255,.15); }
+  #wanted { top:14px; right:16px; padding:8px 12px; font-size:22px; letter-spacing:4px;
+    color:var(--magenta); text-shadow:0 0 10px var(--magenta); }
+  #wanted .dim { color:#3a4a63; text-shadow:none; }
+  #stats { top:14px; left:16px; padding:10px 14px; min-width:210px; }
+  #health-wrap { height:10px; background:#12203a; border-radius:6px; overflow:hidden; margin:6px 0 8px; }
+  #health { height:100%; width:100%; background:linear-gradient(90deg,#22e6ff,#37ff9e); }
+  #cash { font-size:20px; font-weight:700; color:#7dffb0; text-shadow:0 0 8px rgba(55,255,158,.6); }
+  #speed { font-size:13px; color:var(--cyan); margin-top:4px; }
+  #objective { left:16px; bottom:16px; padding:10px 14px; max-width:340px; }
+  #objective h2 { font-size:12px; letter-spacing:2px; color:var(--magenta); margin-bottom:4px; }
+  #objective p { font-size:14px; line-height:1.45; }
+  #minimap { right:16px; bottom:16px; width:168px; height:168px; border-radius:10px;
+    background:var(--glass); border:1px solid var(--line); }
+  #toast { left:50%; bottom:110px; transform:translateX(-50%); padding:9px 18px;
+    font-size:14px; opacity:0; transition:opacity .25s; white-space:nowrap; }
+  #toast.show { opacity:1; }
+  .overlay { position:absolute; inset:0; z-index:10; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:18px; text-align:center;
+    background:radial-gradient(ellipse at center, rgba(10,16,40,.55), rgba(3,4,12,.88)); }
+  .overlay.hidden { display:none; }
+  .logo { font-size:64px; font-weight:900; letter-spacing:6px; line-height:1;
+    color:#fff; text-shadow:0 0 12px var(--cyan), 0 0 42px var(--magenta); }
+  .logo span { color:var(--magenta); }
+  .tagline { color:#9fd8ef; letter-spacing:3px; font-size:14px; text-transform:uppercase; }
+  .btn { pointer-events:auto; cursor:pointer; border:1px solid var(--cyan); color:#04121a;
+    background:var(--cyan); font-size:18px; font-weight:700; letter-spacing:2px;
+    padding:12px 34px; border-radius:8px; box-shadow:0 0 22px rgba(34,230,255,.55); }
+  .btn:hover { background:#8ff1ff; }
+  .hint { font-size:13px; color:#8fb4c9; line-height:1.7; }
+  .hint b { color:#e8f6ff; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <div id="wanted" class="hud panel" aria-label="Wanted level"><span id="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+  <div id="stats" class="hud panel">
+    <div id="health-wrap"><div id="health"></div></div>
+    <div id="cash">$ 0</div>
+    <div id="speed">0 mph</div>
+  </div>
+  <div id="objective" class="hud panel">
+    <h2>OBJECTIVE</h2>
+    <p id="objective-text">Welcome to Neon Vice. Find your ride and make the city yours.</p>
+  </div>
+  <canvas id="minimap" class="hud" width="168" height="168"></canvas>
+  <div id="toast" class="hud panel"></div>
+
+  <div id="start-screen" class="overlay">
+    <div class="logo">NEON <span>VICE</span></div>
+    <div class="tagline">An open-world crime story &middot; Vice City after dark</div>
+    <button id="start-btn" class="btn" type="button">START ENGINE</button>
+    <div class="hint"><b>W A S D</b> drive &nbsp;&middot;&nbsp; <b>Mouse</b> look &nbsp;&middot;&nbsp; <b>E</b> enter / exit car &nbsp;&middot;&nbsp; <b>Esc</b> pause</div>
+  </div>
+
+  <div id="pause-screen" class="overlay hidden">
+    <div class="logo" style="font-size:42px">PAUSED</div>
+    <button id="resume-btn" class="btn" type="button">RESUME</button>
+    <div class="hint">Press <b>Esc</b> to resume</div>
+  </div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
